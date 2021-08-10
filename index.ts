@@ -1,1 +1,0 @@
-export { StakingPool__factory as StakingPoolFactory } from './src/StakingPool/index';
