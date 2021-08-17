@@ -1,13 +1,14 @@
 {
   "name": "@elysia-dev/contract-typechain",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/elysia-dev/contract-typechain.git",
   "author": "donguk.seo <donguk.seo@modori.io>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "build:d": "cp src/*.d.ts dist"
   },
   "dependencies": {
     "ethers": "^5.4.4"
