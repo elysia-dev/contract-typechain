@@ -11,7 +11,7 @@ Supported contracts
 - IncentivePool (IncentivePool\_\_factory)
 - ERC20 (ERC20\_\_factory)
 
-and others is listed in src/factories
+and others are listed in src/factories
 
 ## Getting started
 
