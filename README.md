@@ -2,7 +2,7 @@
 
 contract typechain for developing elysia dapp.
 
-Do not need to define any types of contract and ABI file with this package!
+Do not need ABI file and to define any types of contract with this package!
 
 Supported contracts
 
