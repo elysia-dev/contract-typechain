@@ -16,7 +16,7 @@ and others are listed in src/factories
 ## Getting started
 
 ```
-yarn install @elysia-dev/contract-typechain
+yarn add @elysia-dev/contract-typechain
 ```
 
 ## Example
