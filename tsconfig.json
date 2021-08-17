@@ -1,12 +1,14 @@
 {
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "outDir": "./dist/",
-    "module": "es6",
-    "target": "es5",
-    "jsx": "react",
-    "allowJs": true,
-    "moduleResolution": "node",
-    "noImplicitAny": false,
+      /* Basic Options */
+      "target": "es5",
+      "module": "commonjs",
+      "declaration": true,
+      "outDir": "./dist",
+      "strict": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["dist"]
+  "exclude": ["__test__", "./**/*.spec.ts", "dist"]
 }
