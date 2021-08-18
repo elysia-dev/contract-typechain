@@ -2,7 +2,7 @@
 
 contract typechain for developing elysia dapp.
 
-Do not need to define any types of contract and ABI file with this package!
+Do not need ABI file and to define any types of contract with this package!
 
 Supported contracts
 
@@ -11,12 +11,12 @@ Supported contracts
 - IncentivePool (IncentivePool\_\_factory)
 - ERC20 (ERC20\_\_factory)
 
-and others is listed in src/factories
+and others are listed in src/factories
 
 ## Getting started
 
 ```
-yarn install @elysia-dev/contract-typechain
+yarn add @elysia-dev/contract-typechain
 ```
 
 ## Example
