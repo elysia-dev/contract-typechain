@@ -31,27 +31,36 @@ import { StakingPool__factory } from "@elysia-dev/contract-typechain";
 const StakingModal: React.FunctionComponent = () => {
   const { account, library } = useWeb3React();
   const contract = useMemo(() => {
-    return StakingPool__factory.connect("0xDF409737E31475Ec46e13335Ad5370c551b97D12", library as any)
+    return StakingPool__factory.connect("0xDF409737E31475Ec46e13335Ad5370c551b97D12", library.getSigner)
   }, [library])
 
   const stake = async (amount: BigNumber) => {
-    const { to, data } = await this.contract?.populateTransaction.stake(amount);
-      try {
-        const txHash = await this.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              to,
-              from: account,
-              data,
-            },
-          ],
-      })
+    const tx = await contract.stake(
+      amount
+    )
 
-      return txHash;
-    } catch (e) {
-      console.log(e);
-      return
+    /* tx is typed well
+      interface TransactionResponse extends Transaction {
+        hash: string;
+        blockNumber?: number,
+        blockHash?: string,
+        timestamp?: number,
+        confirmations: number,
+        from: string;
+        raw?: string,
+        wait: (confirmations?: number) => Promise<TransactionReceipt>
+      };
+    */
+
+    it(tx){
+      console.log(tx.hash)
+      /*
+      tx.wait().then(() => {
+
+      })
+      */
+    } else {
+      console.log("Tx is not created")
     }
   }
 
@@ -77,22 +86,7 @@ const contract = MoneyPool__factory.connect(
 )
 
 const deposit = async () => {
-  const contractResponse = await contract.deposit(
-    asset, account, amount
-  )
 
-  /* contractResponse is typed well
-    interface TransactionResponse extends Transaction {
-      hash: string;
-      blockNumber?: number,
-      blockHash?: string,
-      timestamp?: number,
-      confirmations: number,
-      from: string;
-      raw?: string,
-      wait: (confirmations?: number) => Promise<TransactionReceipt>
-    };
-  */
 }
 
 ```
