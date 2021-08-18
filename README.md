@@ -31,7 +31,10 @@ import { StakingPool__factory } from "@elysia-dev/contract-typechain";
 const StakingModal: React.FunctionComponent = () => {
   const { account, library } = useWeb3React();
   const contract = useMemo(() => {
-    return StakingPool__factory.connect("0xDF409737E31475Ec46e13335Ad5370c551b97D12", library.getSigner)
+    return StakingPool__factory.connect(
+      "0xDF409737E31475Ec46e13335Ad5370c551b97D12",
+      library.getSigner()
+    )
   }, [library])
 
   const stake = async (amount: BigNumber) => {
