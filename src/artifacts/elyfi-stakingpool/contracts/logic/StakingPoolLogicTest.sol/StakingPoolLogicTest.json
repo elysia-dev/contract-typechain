@@ -1,0 +1,42 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "StakingPoolLogicTest",
+  "sourceName": "contracts/logic/StakingPoolLogicTest.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newRewardIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalPrincipal",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "currentRound",
+          "type": "uint8"
+        }
+      ],
+      "name": "UpdateStakingPool",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ab6e70eaffcaa9a987f35260e584f048cdc4e5668b45c43c9306f3956916212664736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ab6e70eaffcaa9a987f35260e584f048cdc4e5668b45c43c9306f3956916212664736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

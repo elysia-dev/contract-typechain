@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "InterestRateModelStorage",
+  "sourceName": "contracts/InterestRateModelStorage.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212204c6dbb2591fa1cac3e6d4a61792d69bdc85bd2d7d0550784e7a0f8fa9f177a9c64736f6c63430008030033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212204c6dbb2591fa1cac3e6d4a61792d69bdc85bd2d7d0550784e7a0f8fa9f177a9c64736f6c63430008030033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
