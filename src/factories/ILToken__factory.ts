@@ -2,19 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer } from "ethers";
+import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-
-import type { ILToken } from "../ILToken";
-
-export class ILToken__factory {
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): ILToken {
-    return new Contract(address, _abi, signerOrProvider) as ILToken;
-  }
-}
+import type { ILToken, ILTokenInterface } from "../ILToken";
 
 const _abi = [
   {
@@ -415,3 +405,16 @@ const _abi = [
     type: "function",
   },
 ];
+
+export class ILToken__factory {
+  static readonly abi = _abi;
+  static createInterface(): ILTokenInterface {
+    return new utils.Interface(_abi) as ILTokenInterface;
+  }
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): ILToken {
+    return new Contract(address, _abi, signerOrProvider) as ILToken;
+  }
+}

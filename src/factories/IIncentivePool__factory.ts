@@ -2,19 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer } from "ethers";
+import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-
-import type { IIncentivePool } from "../IIncentivePool";
-
-export class IIncentivePool__factory {
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): IIncentivePool {
-    return new Contract(address, _abi, signerOrProvider) as IIncentivePool;
-  }
-}
+import type {
+  IIncentivePool,
+  IIncentivePoolInterface,
+} from "../IIncentivePool";
 
 const _abi = [
   {
@@ -132,3 +125,16 @@ const _abi = [
     type: "function",
   },
 ];
+
+export class IIncentivePool__factory {
+  static readonly abi = _abi;
+  static createInterface(): IIncentivePoolInterface {
+    return new utils.Interface(_abi) as IIncentivePoolInterface;
+  }
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): IIncentivePool {
+    return new Contract(address, _abi, signerOrProvider) as IIncentivePool;
+  }
+}

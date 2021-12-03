@@ -2,19 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer } from "ethers";
+import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-
-import type { ITokenizer } from "../ITokenizer";
-
-export class ITokenizer__factory {
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): ITokenizer {
-    return new Contract(address, _abi, signerOrProvider) as ITokenizer;
-  }
-}
+import type { ITokenizer, ITokenizerInterface } from "../ITokenizer";
 
 const _abi = [
   {
@@ -781,3 +771,16 @@ const _abi = [
     type: "function",
   },
 ];
+
+export class ITokenizer__factory {
+  static readonly abi = _abi;
+  static createInterface(): ITokenizerInterface {
+    return new utils.Interface(_abi) as ITokenizerInterface;
+  }
+  static connect(
+    address: string,
+    signerOrProvider: Signer | Provider
+  ): ITokenizer {
+    return new Contract(address, _abi, signerOrProvider) as ITokenizer;
+  }
+}
