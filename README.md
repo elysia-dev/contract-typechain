@@ -92,4 +92,12 @@ const deposit = async () => {
 
 }
 
+
 ```
+
+## Release
+1. yarn build
+2. yarn build:d
+3. update pacakge version number
+4. npm publish
+
