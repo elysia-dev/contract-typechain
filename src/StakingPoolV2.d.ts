@@ -26,23 +26,23 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "checkpoints(address,uint32)": FunctionFragment;
-    "claim()": FunctionFragment;
+    "claim(uint8)": FunctionFragment;
+    "currentRound()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "delegate(address)": FunctionFragment;
     "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "delegates(address)": FunctionFragment;
-    "depositFor(address,uint256)": FunctionFragment;
     "getPastTotalSupply(uint256)": FunctionFragment;
     "getPastVotes(address,uint256)": FunctionFragment;
-    "getPoolData()": FunctionFragment;
-    "getRewardIndex()": FunctionFragment;
-    "getUserReward(address)": FunctionFragment;
-    "getUserRewardIndex(address)": FunctionFragment;
+    "getPoolData(uint8)": FunctionFragment;
+    "getRewardIndex(uint8)": FunctionFragment;
+    "getUserData(uint8,address)": FunctionFragment;
+    "getUserReward(address,uint8)": FunctionFragment;
     "getVotes(address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initNewRound(uint256,uint16,uint8,uint8,uint8)": FunctionFragment;
-    "migrate()": FunctionFragment;
+    "initNewRound(uint256,uint256,uint256)": FunctionFragment;
+    "migrate(uint256,uint8)": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "numCheckpoints(address)": FunctionFragment;
@@ -56,8 +56,7 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     "transfer(address,uint256)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "underlying()": FunctionFragment;
-    "withdraw(uint256)": FunctionFragment;
-    "withdrawTo(address,uint256)": FunctionFragment;
+    "withdraw(uint256,uint8)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -77,7 +76,11 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     functionFragment: "checkpoints",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
+  encodeFunctionData(functionFragment: "claim", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "currentRound",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "decreaseAllowance",
@@ -97,10 +100,6 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "delegates", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "depositFor",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getPastTotalSupply",
     values: [BigNumberish]
   ): string;
@@ -110,19 +109,19 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getPoolData",
-    values?: undefined
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRewardIndex",
-    values?: undefined
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserData",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "getUserReward",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getUserRewardIndex",
-    values: [string]
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "getVotes", values: [string]): string;
   encodeFunctionData(
@@ -131,15 +130,12 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initNewRound",
-    values: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "migrate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "migrate",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "nonces", values: [string]): string;
   encodeFunctionData(
@@ -190,11 +186,7 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "withdrawTo",
-    values: [string, BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
 
   decodeFunctionResult(
@@ -209,6 +201,10 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "currentRound",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "decreaseAllowance",
@@ -220,7 +216,6 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "delegates", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "depositFor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getPastTotalSupply",
     data: BytesLike
@@ -238,11 +233,11 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUserReward",
+    functionFragment: "getUserData",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUserRewardIndex",
+    functionFragment: "getUserReward",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getVotes", data: BytesLike): Result;
@@ -287,23 +282,24 @@ interface StakingPoolV2Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "underlying", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "withdrawTo", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
-    "Claim(address,uint256,uint256)": EventFragment;
+    "Claim(address,uint256,uint256,uint8)": EventFragment;
     "DelegateChanged(address,address,address)": EventFragment;
     "DelegateVotesChanged(address,uint256,uint256)": EventFragment;
-    "Migrate(address,uint256)": EventFragment;
-    "Stake(address,uint256,uint256,uint256)": EventFragment;
+    "InitRound(uint256,uint256,uint256,uint256)": EventFragment;
+    "Migrate(address,uint256,uint8,uint8)": EventFragment;
+    "Stake(address,uint256,uint256,uint256,uint8)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
-    "Withdraw(address,uint256,uint256,uint256)": EventFragment;
+    "Withdraw(address,uint256,uint256,uint256,uint8)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Claim"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DelegateChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DelegateVotesChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "InitRound"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Migrate"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Stake"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -377,8 +373,11 @@ export class StakingPoolV2 extends BaseContract {
     ): Promise<[[number, BigNumber] & { fromBlock: number; votes: BigNumber }]>;
 
     claim(
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    currentRound(overrides?: CallOverrides): Promise<[number]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -405,12 +404,6 @@ export class StakingPoolV2 extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<[string]>;
 
-    depositFor(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -423,24 +416,39 @@ export class StakingPoolV2 extends BaseContract {
     ): Promise<[BigNumber]>;
 
     getPoolData(
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         rewardPerSecond: BigNumber;
         rewardIndex: BigNumber;
+        startTimestamp: BigNumber;
+        endTimestamp: BigNumber;
+        totalPrincipal: BigNumber;
         lastUpdateTimestamp: BigNumber;
       }
     >;
 
-    getRewardIndex(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getUserReward(
-      user: string,
+    getRewardIndex(
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    getUserRewardIndex(
+    getUserData(
+      round: BigNumberish,
       user: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        userIndex: BigNumber;
+        userReward: BigNumber;
+        userPrincipal: BigNumber;
+      }
+    >;
+
+    getUserReward(
+      user: string,
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -454,14 +462,14 @@ export class StakingPoolV2 extends BaseContract {
 
     initNewRound(
       rewardPerSecond: BigNumberish,
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
+      startTimestamp: BigNumberish,
       duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     migrate(
+      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -519,12 +527,7 @@ export class StakingPoolV2 extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    withdrawTo(
-      account: string,
-      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -552,8 +555,11 @@ export class StakingPoolV2 extends BaseContract {
   ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
 
   claim(
+    round: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  currentRound(overrides?: CallOverrides): Promise<number>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -580,12 +586,6 @@ export class StakingPoolV2 extends BaseContract {
 
   delegates(account: string, overrides?: CallOverrides): Promise<string>;
 
-  depositFor(
-    account: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   getPastTotalSupply(
     blockNumber: BigNumberish,
     overrides?: CallOverrides
@@ -598,21 +598,39 @@ export class StakingPoolV2 extends BaseContract {
   ): Promise<BigNumber>;
 
   getPoolData(
+    round: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       rewardPerSecond: BigNumber;
       rewardIndex: BigNumber;
+      startTimestamp: BigNumber;
+      endTimestamp: BigNumber;
+      totalPrincipal: BigNumber;
       lastUpdateTimestamp: BigNumber;
     }
   >;
 
-  getRewardIndex(overrides?: CallOverrides): Promise<BigNumber>;
+  getRewardIndex(
+    round: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  getUserReward(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  getUserRewardIndex(
+  getUserData(
+    round: BigNumberish,
     user: string,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber] & {
+      userIndex: BigNumber;
+      userReward: BigNumber;
+      userPrincipal: BigNumber;
+    }
+  >;
+
+  getUserReward(
+    user: string,
+    round: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -626,14 +644,14 @@ export class StakingPoolV2 extends BaseContract {
 
   initNewRound(
     rewardPerSecond: BigNumberish,
-    year: BigNumberish,
-    month: BigNumberish,
-    day: BigNumberish,
+    startTimestamp: BigNumberish,
     duration: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   migrate(
+    amount: BigNumberish,
+    round: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -688,12 +706,7 @@ export class StakingPoolV2 extends BaseContract {
 
   withdraw(
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  withdrawTo(
-    account: string,
-    amount: BigNumberish,
+    round: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -720,7 +733,9 @@ export class StakingPoolV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
 
-    claim(overrides?: CallOverrides): Promise<void>;
+    claim(round: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    currentRound(overrides?: CallOverrides): Promise<number>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -744,12 +759,6 @@ export class StakingPoolV2 extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<string>;
 
-    depositFor(
-      account: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -762,21 +771,39 @@ export class StakingPoolV2 extends BaseContract {
     ): Promise<BigNumber>;
 
     getPoolData(
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
+      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         rewardPerSecond: BigNumber;
         rewardIndex: BigNumber;
+        startTimestamp: BigNumber;
+        endTimestamp: BigNumber;
+        totalPrincipal: BigNumber;
         lastUpdateTimestamp: BigNumber;
       }
     >;
 
-    getRewardIndex(overrides?: CallOverrides): Promise<BigNumber>;
+    getRewardIndex(
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getUserReward(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getUserRewardIndex(
+    getUserData(
+      round: BigNumberish,
       user: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber] & {
+        userIndex: BigNumber;
+        userReward: BigNumber;
+        userPrincipal: BigNumber;
+      }
+    >;
+
+    getUserReward(
+      user: string,
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -790,14 +817,16 @@ export class StakingPoolV2 extends BaseContract {
 
     initNewRound(
       rewardPerSecond: BigNumberish,
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
+      startTimestamp: BigNumberish,
       duration: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    migrate(overrides?: CallOverrides): Promise<void>;
+    migrate(
+      amount: BigNumberish,
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -843,13 +872,11 @@ export class StakingPoolV2 extends BaseContract {
 
     underlying(overrides?: CallOverrides): Promise<string>;
 
-    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    withdrawTo(
-      account: string,
+    withdraw(
       amount: BigNumberish,
+      round: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
   };
 
   filters: {
@@ -865,10 +892,16 @@ export class StakingPoolV2 extends BaseContract {
     Claim(
       user?: string | null,
       reward?: null,
-      rewardLeft?: null
+      rewardLeft?: null,
+      currentRound?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { user: string; reward: BigNumber; rewardLeft: BigNumber }
+      [string, BigNumber, BigNumber, number],
+      {
+        user: string;
+        reward: BigNumber;
+        rewardLeft: BigNumber;
+        currentRound: number;
+      }
     >;
 
     DelegateChanged(
@@ -889,26 +922,50 @@ export class StakingPoolV2 extends BaseContract {
       { delegate: string; previousBalance: BigNumber; newBalance: BigNumber }
     >;
 
+    InitRound(
+      rewardPerSecond?: null,
+      startTimestamp?: null,
+      endTimestamp?: null,
+      currentRound?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, BigNumber, BigNumber],
+      {
+        rewardPerSecond: BigNumber;
+        startTimestamp: BigNumber;
+        endTimestamp: BigNumber;
+        currentRound: BigNumber;
+      }
+    >;
+
     Migrate(
       user?: null,
-      amount?: null
+      amount?: null,
+      migrateRound?: null,
+      currentRound?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { user: string; amount: BigNumber }
+      [string, BigNumber, number, number],
+      {
+        user: string;
+        amount: BigNumber;
+        migrateRound: number;
+        currentRound: number;
+      }
     >;
 
     Stake(
       user?: string | null,
       amount?: null,
       userIndex?: null,
-      userPrincipal?: null
+      userPrincipal?: null,
+      currentRound?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, BigNumber, BigNumber, number],
       {
         user: string;
         amount: BigNumber;
         userIndex: BigNumber;
         userPrincipal: BigNumber;
+        currentRound: number;
       }
     >;
 
@@ -925,14 +982,16 @@ export class StakingPoolV2 extends BaseContract {
       user?: string | null,
       amount?: null,
       userIndex?: null,
-      userPrincipal?: null
+      userPrincipal?: null,
+      currentRound?: null
     ): TypedEventFilter<
-      [string, BigNumber, BigNumber, BigNumber],
+      [string, BigNumber, BigNumber, BigNumber, number],
       {
         user: string;
         amount: BigNumber;
         userIndex: BigNumber;
         userPrincipal: BigNumber;
+        currentRound: number;
       }
     >;
   };
@@ -961,8 +1020,11 @@ export class StakingPoolV2 extends BaseContract {
     ): Promise<BigNumber>;
 
     claim(
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    currentRound(overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -989,12 +1051,6 @@ export class StakingPoolV2 extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    depositFor(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -1006,14 +1062,25 @@ export class StakingPoolV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getPoolData(overrides?: CallOverrides): Promise<BigNumber>;
+    getPoolData(
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getRewardIndex(overrides?: CallOverrides): Promise<BigNumber>;
+    getRewardIndex(
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getUserReward(user: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getUserRewardIndex(
+    getUserData(
+      round: BigNumberish,
       user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getUserReward(
+      user: string,
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1027,14 +1094,14 @@ export class StakingPoolV2 extends BaseContract {
 
     initNewRound(
       rewardPerSecond: BigNumberish,
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
+      startTimestamp: BigNumberish,
       duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     migrate(
+      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1092,12 +1159,7 @@ export class StakingPoolV2 extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    withdrawTo(
-      account: string,
-      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -1129,8 +1191,11 @@ export class StakingPoolV2 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     claim(
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    currentRound(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1160,12 +1225,6 @@ export class StakingPoolV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    depositFor(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -1177,17 +1236,25 @@ export class StakingPoolV2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getPoolData(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPoolData(
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    getRewardIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getRewardIndex(
+      round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    getUserReward(
+    getUserData(
+      round: BigNumberish,
       user: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getUserRewardIndex(
+    getUserReward(
       user: string,
+      round: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1204,14 +1271,14 @@ export class StakingPoolV2 extends BaseContract {
 
     initNewRound(
       rewardPerSecond: BigNumberish,
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
+      startTimestamp: BigNumberish,
       duration: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     migrate(
+      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1272,12 +1339,7 @@ export class StakingPoolV2 extends BaseContract {
 
     withdraw(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    withdrawTo(
-      account: string,
-      amount: BigNumberish,
+      round: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
