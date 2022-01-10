@@ -37,8 +37,34 @@ const _abi = [
   },
   {
     anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newEndTimestamp",
+        type: "uint256",
+      },
+    ],
+    name: "IncentiveEndTimestampUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
     inputs: [],
     name: "IncentivePoolEnded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newAmountPerSecond",
+        type: "uint256",
+      },
+    ],
+    name: "RewardPerSecondUpdated",
     type: "event",
   },
   {
@@ -100,6 +126,32 @@ const _abi = [
       },
     ],
     name: "initializeIncentivePool",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newAmountPerSecond",
+        type: "uint256",
+      },
+    ],
+    name: "setAmountPerSecond",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "newEndTimestamp",
+        type: "uint256",
+      },
+    ],
+    name: "setEndTimestamp",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

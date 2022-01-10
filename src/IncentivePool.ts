@@ -4,6 +4,7 @@
 import {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -29,6 +30,8 @@ export interface IncentivePoolInterface extends utils.Interface {
     "initializeIncentivePool(address)": FunctionFragment;
     "isClosed()": FunctionFragment;
     "lToken()": FunctionFragment;
+    "setAmountPerSecond(uint256)": FunctionFragment;
+    "setEndTimestamp(uint256)": FunctionFragment;
     "updateIncentivePool(address)": FunctionFragment;
     "withdrawResidue()": FunctionFragment;
   };
@@ -71,6 +74,14 @@ export interface IncentivePoolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "isClosed", values?: undefined): string;
   encodeFunctionData(functionFragment: "lToken", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "setAmountPerSecond",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setEndTimestamp",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "updateIncentivePool",
     values: [string]
@@ -119,6 +130,14 @@ export interface IncentivePoolInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "isClosed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lToken", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "setAmountPerSecond",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setEndTimestamp",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updateIncentivePool",
     data: BytesLike
   ): Result;
@@ -129,12 +148,18 @@ export interface IncentivePoolInterface extends utils.Interface {
 
   events: {
     "ClaimIncentive(address,uint256,uint256)": EventFragment;
+    "IncentiveEndTimestampUpdated(uint256)": EventFragment;
     "IncentivePoolEnded()": EventFragment;
+    "RewardPerSecondUpdated(uint256)": EventFragment;
     "UpdateIncentivePool(address,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ClaimIncentive"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "IncentiveEndTimestampUpdated"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "IncentivePoolEnded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RewardPerSecondUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UpdateIncentivePool"): EventFragment;
 }
 
@@ -145,10 +170,26 @@ export type ClaimIncentiveEvent = TypedEvent<
 
 export type ClaimIncentiveEventFilter = TypedEventFilter<ClaimIncentiveEvent>;
 
+export type IncentiveEndTimestampUpdatedEvent = TypedEvent<
+  [BigNumber],
+  { newEndTimestamp: BigNumber }
+>;
+
+export type IncentiveEndTimestampUpdatedEventFilter =
+  TypedEventFilter<IncentiveEndTimestampUpdatedEvent>;
+
 export type IncentivePoolEndedEvent = TypedEvent<[], {}>;
 
 export type IncentivePoolEndedEventFilter =
   TypedEventFilter<IncentivePoolEndedEvent>;
+
+export type RewardPerSecondUpdatedEvent = TypedEvent<
+  [BigNumber],
+  { newAmountPerSecond: BigNumber }
+>;
+
+export type RewardPerSecondUpdatedEventFilter =
+  TypedEventFilter<RewardPerSecondUpdatedEvent>;
 
 export type UpdateIncentivePoolEvent = TypedEvent<
   [string, BigNumber, BigNumber],
@@ -235,6 +276,16 @@ export interface IncentivePool extends BaseContract {
 
     lToken(overrides?: CallOverrides): Promise<[string]>;
 
+    setAmountPerSecond(
+      newAmountPerSecond: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setEndTimestamp(
+      newEndTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     updateIncentivePool(
       user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -291,6 +342,16 @@ export interface IncentivePool extends BaseContract {
   isClosed(overrides?: CallOverrides): Promise<boolean>;
 
   lToken(overrides?: CallOverrides): Promise<string>;
+
+  setAmountPerSecond(
+    newAmountPerSecond: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setEndTimestamp(
+    newEndTimestamp: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   updateIncentivePool(
     user: string,
@@ -350,6 +411,16 @@ export interface IncentivePool extends BaseContract {
 
     lToken(overrides?: CallOverrides): Promise<string>;
 
+    setAmountPerSecond(
+      newAmountPerSecond: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setEndTimestamp(
+      newEndTimestamp: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     updateIncentivePool(user: string, overrides?: CallOverrides): Promise<void>;
 
     withdrawResidue(overrides?: CallOverrides): Promise<void>;
@@ -367,8 +438,22 @@ export interface IncentivePool extends BaseContract {
       userIncentiveIndex?: null
     ): ClaimIncentiveEventFilter;
 
+    "IncentiveEndTimestampUpdated(uint256)"(
+      newEndTimestamp?: null
+    ): IncentiveEndTimestampUpdatedEventFilter;
+    IncentiveEndTimestampUpdated(
+      newEndTimestamp?: null
+    ): IncentiveEndTimestampUpdatedEventFilter;
+
     "IncentivePoolEnded()"(): IncentivePoolEndedEventFilter;
     IncentivePoolEnded(): IncentivePoolEndedEventFilter;
+
+    "RewardPerSecondUpdated(uint256)"(
+      newAmountPerSecond?: null
+    ): RewardPerSecondUpdatedEventFilter;
+    RewardPerSecondUpdated(
+      newAmountPerSecond?: null
+    ): RewardPerSecondUpdatedEventFilter;
 
     "UpdateIncentivePool(address,uint256,uint256)"(
       user?: string | null,
@@ -420,6 +505,16 @@ export interface IncentivePool extends BaseContract {
 
     lToken(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setAmountPerSecond(
+      newAmountPerSecond: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setEndTimestamp(
+      newEndTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     updateIncentivePool(
       user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -469,6 +564,16 @@ export interface IncentivePool extends BaseContract {
     isClosed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setAmountPerSecond(
+      newAmountPerSecond: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setEndTimestamp(
+      newEndTimestamp: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     updateIncentivePool(
       user: string,
